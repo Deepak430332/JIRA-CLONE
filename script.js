@@ -1,5 +1,5 @@
 // const block = document.querySelector('#block');
-// const container = document.querySelector('#container');
+// const container = document.querySelector('.container');
 
 // /**
 //  * 
@@ -68,3 +68,65 @@
 // // console.log(user1 === user) //true
 // // user1 = {...user}// #200
 // // console.log(user1 === user); // false;
+
+const createIssue = document.getElementById("create-issue");
+const issueInput = document.getElementById("issue-input");
+const todoContainer = document.getElementById("todo");
+
+createIssue.addEventListener('click',onCreateClick);
+
+issueInput.addEventListener('blur',onBlurCreateIssueInput);
+issueInput.addEventListener('keyup',onEnterInput);
+
+function toggleCreateIssueOptions(){
+
+    createIssue.classList.toggle('hide');
+    issueInput.classList.toggle('hide');
+
+    if(!issueInput.classList.contains('hide')){
+        //if users see text ara we  need to auto focus on it
+        issueInput.focus();
+    }
+}
+
+function onBlurCreateIssueInput(){
+
+    if(!issueInput.classList.contains('hide'))
+        toggleCreateIssueOptions();
+}
+
+function onCreateClick(){
+
+    toggleCreateIssueOptions();
+}
+
+function onEnterInput(e){
+
+    if(e.keyCode === 13){
+
+        // clicked on enter key
+        const issueName = issueInput.value;
+        if(!issueName)
+            return;
+        
+        // create an issue card with the issueName
+
+        const issueCard = document.createElement('div');
+        issueCard.className = 'card';
+
+        issueCard.innerHTML = `
+                            <span>${issueName}</span>
+                            <span class="material-icons" onclick="deleteCard(this)">delete</span>
+                            `;
+        issueCard.draggable = true;
+        issueCard.addEventListener('dragstart',onDragStart);
+        issueInput.value='';
+        todoContainer.appendChild(issueCard);
+        toggleCreateIssueOptions();
+    }
+}
+
+function deleteCard(deleteButton){
+    const card = deleteButton.parentNode ;
+    card.remove();
+}   
